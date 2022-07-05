@@ -1,8 +1,6 @@
 const chalk = require('chalk');
 
-/** On ready event 
- * @param {Client} client The Discord client
-*/
+// On ready event 
 module.exports = {
 	name: 'ready',
 	once: true,
