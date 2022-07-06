@@ -1,13 +1,14 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const client = require('../../utils/client');
+const { SlashCommandBuilder } = require("@discordjs/builders");
+const client = require("../../utils/client");
 
 // Ping command 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('ping')
-		.setDescription('Replies with pong!'),
+		.setName("ping")
+		.setDescription("Replies with pong!"),
+		
 	async execute(interaction) {
-		const sent = await interaction.reply({ content: 'Pinging...', fetchReply: true });
+		const sent = await interaction.reply({ content: "Pinging...", fetchReply: true });
 
 		// Calculate roundtrip latency and websocket heartbeat
 		const roundtrip = sent.createdTimestamp - interaction.createdTimestamp;

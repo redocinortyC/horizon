@@ -1,5 +1,5 @@
 // Importing environment variables from .env file
-require('dotenv').config();
+require("dotenv").config();
 const { TOKEN, CLIENT_ID, GUILD_ID } = process.env;
 
 const token = TOKEN;
