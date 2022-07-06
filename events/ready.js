@@ -5,6 +5,6 @@ module.exports = {
 	name: 'ready',
 	once: true,
 	execute(client) {
-		console.log(chalk.green("%s is ready!"), client.user.tag);
+		console.log(chalk.green("\n[READY] %s is ready!\n"), client.user.tag);
 	},
 };
