@@ -10,12 +10,17 @@ client.commands = new Collection();
 
 // Command handling
 const commandsPath = path.join(__dirname, 'commands');
-const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+const commandFolders = fs.readdirSync(commandsPath);
 
-for (const file of commandFiles) {
-	const filePath = path.join(commandsPath, file);
-	const command = require(filePath);
-	client.commands.set(command.data.name, command);
+for (const folder of commandFolders) {
+	const folderPath = path.join(commandsPath, folder);
+	const commandFiles = fs.readdirSync(folderPath).filter(file => file.endsWith('.js'));
+
+	for (const file of commandFiles) {
+		const filePath = path.join(folderPath, file);
+		const command = require(filePath);
+		client.commands.set(command.data.name, command);
+	}
 }
 
 // Event handling

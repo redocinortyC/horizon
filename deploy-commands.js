@@ -12,23 +12,35 @@ const commands = [];
 
 // Push all commands to array
 const commandsPath = path.join(__dirname, 'commands');
-const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+const commandFolders = fs.readdirSync(commandsPath);
 
-for (const file of commandFiles) {
-	const filePath = path.join(commandsPath, file);
-	const command = require(filePath);
-	commands.push(command.data.toJSON());
+for (const folder of commandFolders) {
+	const folderPath = path.join(commandsPath, folder);
+	const commandFiles = fs.readdirSync(folderPath).filter(file => file.endsWith('.js'));
+
+	for (const file of commandFiles) {
+		const filePath = path.join(folderPath, file);
+		const command = require(filePath);
+		commands.push(command.data.toJSON());
+	}
 }
 
 // Register all commands
 (async () => {
 	try {
-		console.log(chalk.yellow("Started refreshing application (/) commands..."));
+		console.log(chalk.yellow("[DEPLOY] Started refreshing application (/) commands..."));
 		await rest.put(
 			Routes.applicationGuildCommands(clientId, guildId),
 			{ body: commands },
 		);
-		console.log(chalk.green("Successfully refreshed application (/) commands!"));
+		console.log(chalk.green("[DEPLOY] Successfully refreshed application (/) commands!"));
+		
+		// print out all commands
+		console.log(chalk.cyan("\n[DEPLOY] Registered commands:"));
+		commands.forEach(command => {
+			console.log(chalk.cyan(`[COMMAND] - ${command.name}`));
+		});
+
 	} catch (error) {
 		console.error(error);
 	}
