@@ -109,7 +109,7 @@ module.exports = {
                 .setColor(Math.floor(Math.random() * 16777215).toString(16))
                 .setFooter({
                     text: "Powered by https://v2.jokeapi.dev",
-                    icon_url: "https://sv443.net/resources/images/jokeapi.png"
+                    iconURL: "https://sv443.net/resources/images/jokeapi.png"
                 });
             
             await interaction.reply({ content: "✨ I found a joke!", embeds: [embed] });
@@ -157,7 +157,8 @@ module.exports = {
                 .setImage(`${photo.media.m}`)
                 .setTimestamp(photo.date_taken)
                 .setFooter({
-                    text: `Photo from Flickr - uploaded by ${photo.author}`
+                    text: `Photo from Flickr - uploaded by ${photo.author}`,
+                    iconURL: "https://www.flickr.com/favicon.ico"
                 });
 
             await interaction.reply({ content: `🌄 I found a ${type}!`, embeds: [horizon_embed] });
