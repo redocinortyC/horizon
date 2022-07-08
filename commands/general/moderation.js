@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, bold } = require("@discordjs/builders");
+const { PermissionFlagsBits } = require('discord-api-types/v10');
 
 // Moderation commands
 module.exports = {
@@ -23,7 +24,8 @@ module.exports = {
                 .setDescription("Mutes a user in the server.")
                 .addUserOption(option => option.setName("target").setDescription("The user to be muted"))
                 .addIntegerOption(option => option.setName("duration").setDescription("The duration of the mute in minutes"))
-                .addStringOption(option => option.setName("reason").setDescription("The reason for the mute"))),
+                .addStringOption(option => option.setName("reason").setDescription("The reason for the mute")))
+        .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers),
                 
 	async execute(interaction) {
         const subcommand = interaction.options.getSubcommand();
