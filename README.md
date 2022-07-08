@@ -1,26 +1,6 @@
 # Horizon
 🌅 The official Discord bot for the International Junior Honour Society community server
 
-## Commands
--  Experiment
-   -  React to a message
-- General
-  - Help
-  - Moderation
-    - Ban
-    - Kick
-    - Mute
-  - Roles
-    - Add
-    - Remove
-- Utility
-  - Fun
-    - Roll a die
-    - Flip a coin
-    - Consult the 8ball
-    - See a sunrise/sunset
-  - Ping
-
 ## Getting started with local development
 To get started with developing the bot locally, you need to clone this repository via
 
