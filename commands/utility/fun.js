@@ -9,25 +9,28 @@ module.exports = {
 		.setDescription("Some entertainment for the bored.")
         .addSubcommand(subcommand =>
             subcommand
-                .setName("roll")
-                .setDescription("Rolls a dice."))
-        .addSubcommand(subcommand =>
-            subcommand
-                .setName("flip")
-                .setDescription("Flips a coin."))
-        .addSubcommand(subcommand =>
-            subcommand
                 .setName("8ball")
                 .setDescription("Ask the magic 8ball a question.")
                 .addStringOption(option => option.setName("question").setDescription("The question to ask the magic 8ball")))
         .addSubcommand((subcommand) =>
             subcommand
-              .setName("joke")
-              .setDescription("Get a random joke."))
+                .setName("joke")
+                .setDescription("Get a random joke."))
         .addSubcommand((subcommand) =>
             subcommand
-              .setName("quote")
-              .setDescription("Get inspired :sparkles:"))
+                .setName("quote")
+                .setDescription("Get a random quote."))
+        .addSubcommand((subcommand) =>
+            subcommand
+                .setName("pet")
+                .setDescription("Get a random pet pic.")
+                .addStringOption(option => option.setName("type")
+                    .setDescription("The type of pet to get.")
+                    .setRequired(true)
+                    .addChoices(
+                        { name: "cat", value: "cat" },
+                        { name: "dog", value: "dog" },
+                    )))
         .addSubcommand(subcommand =>
             subcommand
                 .setName("horizon")
@@ -44,54 +47,6 @@ module.exports = {
 	async execute(interaction) {
         const subcommand = interaction.options.getSubcommand();
 
-        if (subcommand === "roll") {
-            const die = Math.floor(Math.random() * 6) + 1;
-            interaction.reply({ content: `🎲 You rolled a ${die}!` });
-        }
-
-        if (subcommand === "flip") {
-            const coin = Math.random() < 0.5 ? "heads" : "tails";
-            interaction.reply({ content: `🪙 You flipped ${coin}!` });
-        }
-
-        if (subcommand === "8ball") {
-            const question = interaction.options.getString("question");
-            if (!question) {
-                await interaction.reply({ content: "Please specify a question.", ephemeral: true });
-                return;
-            }
-
-            if (question.toLowerCase().includes("what do you get when you multiply six by nine")) {
-                interaction.reply({ content: "You asked the magic 8ball the Ultimate Question of Life, the Universe, and Everything.\nThe magic 8ball says: Six by nine. Forty-two. 🛸" });
-            } else {
-                const answers = [
-                    "It is certain.",
-                    "It is decidedly so.",
-                    "Without a doubt.",
-                    "Yes - definitely.",
-                    "You may rely on it.",
-                    "As I see it, yes.",
-                    "Most likely.",
-                    "Outlook good.",
-                    "Yes.",
-                    "Signs point to yes.",
-                    "Reply hazy, try again.",
-                    "Ask again later.",
-                    "Better not tell you now.",
-                    "Cannot predict now.",
-                    "Concentrate and ask again.",
-                    "Don't count on it.",
-                    "My reply is no.",
-                    "My sources say no.",
-                    "Outlook not so good.",
-                    "Very doubtful."
-                ];
-
-                const answer = answers[Math.floor(Math.random() * answers.length)];
-                await interaction.reply({ content: `You asked: ${question}\n🎱 The magic 8ball says: ${answer}` });
-            }
-        }
-
         if (subcommand === "joke") {
             let response = await axios.get("https://v2.jokeapi.dev/joke/Any?safe-mode");
             let joke;
@@ -102,7 +57,6 @@ module.exports = {
                 joke = response.data.joke;
             }
             
-            // embed
             const embed = new MessageEmbed()
                 .setTitle(response.data.category)
                 .setDescription(joke)
@@ -134,6 +88,56 @@ module.exports = {
                 });
 
             await interaction.reply({ content: "💬 I found a quote!", embeds: [quote_embed] });
+        }
+
+        if (subcommand === "pet") {
+            const type = interaction.options.getString("type");
+            if (!type) {
+                await interaction.reply({ content: "Please specify a type.", ephemeral: true });
+                return;
+            }
+
+            if (type === "cat") {
+                const cat_response = await axios.get("https://aws.random.cat/meow").catch(err => {
+                    interaction.editReply({ content: "Error getting a cat.", ephemeral: true });
+                    console.error(err);
+                });
+
+                const cat_data = cat_response.data;
+                const cat_url = cat_data.file;
+
+                const cat_embed = new MessageEmbed()
+                    .setTitle("Cat")
+                    .setURL(cat_url)
+                    .setColor(Math.floor(Math.random() * 16777215).toString(16))
+                    .setImage(cat_url)
+                    .setFooter({
+                        text: "Powered by https://aws.random.cat",
+                    });
+
+                await interaction.reply({ content: "🐱 I found a cat!", embeds: [cat_embed] });
+            }
+
+            if (type === "dog") {
+                const dog_response = await axios.get("https://dog.ceo/api/breeds/image/random").catch(err => {
+                    interaction.editReply({ content: "Error getting a dog.", ephemeral: true });
+                    console.error(err);
+                });
+
+                const dog_data = dog_response.data;
+                const dog_url = dog_data.message;
+
+                const dog_embed = new MessageEmbed()
+                    .setTitle("Dog")
+                    .setURL(dog_url)
+                    .setColor(Math.floor(Math.random() * 16777215).toString(16))
+                    .setImage(dog_url)
+                    .setFooter({
+                        text: "Powered by https://dog.ceo",
+                    });
+
+                await interaction.reply({ content: "🐶 I found a dog!", embeds: [dog_embed] });
+            }
         }
 
         if (subcommand === "horizon") {
