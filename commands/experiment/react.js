@@ -1,5 +1,4 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
-const emojis = ["💩", "🤔", "🤨", "😱", "😳", "😵", "😡", "😠", "😤", "😭", "😪", "😴", "😷", "🤕", "🤒", "🤓", "🤗", "🤖", "🤔", "🤐", "🤫", "🤥", "🤧", "😈", "👿", "👹", "👺", "💀", "👻", "👽", "🤖", "💩", "🤔", "🤨", "😱", "😳", "😵", "😡", "😠", "😤", "😭", "😪", "😴", "😷", "🤕", "🤒", "🤓", "🤗", "🤖", "🤔", "🤐", "🤫", "🤥", "🤧", "😈", "👿", "👹", "👺", "💀", "👻", "👽", "🤖"];
 
 // React command 
 module.exports = {
@@ -13,8 +12,7 @@ module.exports = {
         const emoji = interaction.options.getString("emoji");
         
         if (!emoji) {
-            const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
-            message.react(randomEmoji);
+            await interaction.editReply({ content: "No emoji specified.", ephemeral: true });
         } else {
             message.react(emoji);
         }
