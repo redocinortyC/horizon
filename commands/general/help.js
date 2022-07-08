@@ -1,6 +1,7 @@
-const { SlashCommandBuilder, inlineCode, bold } = require("@discordjs/builders");
-const client = require("../../utils/client");
+const { SlashCommandBuilder, inlineCode } = require("@discordjs/builders");
 const { MessageEmbed } = require("discord.js");
+const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+const client = require("../../utils/client");
 
 // Help command 
 module.exports = {
@@ -16,23 +17,24 @@ module.exports = {
             }
         }).sort((a, b) => a.name.localeCompare(b.name));
 
-        const embed = {
-            title: "Commands",
-            description: "Here's a list of commands that can be used with the bot.",
-            fields: commands.map(command => {
+        const embed = new MessageEmbed()
+            .setColor("#ffd700")
+            .setTitle("Commands")
+            .addFields(commands.map(command => {
                 return {
                     name: command.name,
-                    value: command.description,
+                    value: command.description + `\nUsage: ${inlineCode("/" + command.name)}`,
                     inline: true
                 }
-            }),
-            timestamp: new Date(),
-            footer: {
+            }))
+            .setTimestamp(new Date())
+            .setFooter({
                 text: "Created by cytronicoder#4975",
-                icon_url: client.user.avatarURL(),
-            }
-        };
-
-        await interaction.reply({ embeds: [embed] });
+                icon_url: client.user.avatarURL()
+            });
+        
+        await interaction.reply("Getting commands...");
+        await wait(2000);
+        await interaction.editReply({ content: "Here\'s a list of commands that can be used with Horizon:", embeds: [embed] });
 	}
 };
