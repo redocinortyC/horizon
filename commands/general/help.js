@@ -29,7 +29,7 @@ module.exports = {
             .setTimestamp(new Date())
             .setFooter({
                 text: "Created by cytronicoder#4975",
-                icon_url: client.user.avatarURL()
+                iconURL: client.user.avatarURL()
             });
         
         await interaction.reply({ content: "Here\'s a list of commands that can be used with Horizon:", embeds: [embed] });
