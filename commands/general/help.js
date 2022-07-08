@@ -1,6 +1,5 @@
 const { SlashCommandBuilder, inlineCode } = require("@discordjs/builders");
 const { MessageEmbed } = require("discord.js");
-const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 const client = require("../../utils/client");
 
 // Help command 
@@ -33,8 +32,6 @@ module.exports = {
                 icon_url: client.user.avatarURL()
             });
         
-        await interaction.reply("Getting commands...");
-        await wait(2000);
-        await interaction.editReply({ content: "Here\'s a list of commands that can be used with Horizon:", embeds: [embed] });
+        await interaction.reply({ content: "Here\'s a list of commands that can be used with Horizon:", embeds: [embed] });
 	}
 };

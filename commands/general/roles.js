@@ -36,6 +36,16 @@ module.exports = {
                 await interaction.reply({ content: "Please specify a role to give the user.", ephemeral: true });
                 return;
             }
+            
+            if (role.comparePositionTo(interaction.member.roles.highest) >= 0) {
+                await interaction.reply({ content: "You cannot give a role higher than or equal to your highest role.", ephemeral: true });
+                return;
+            }
+
+            if (target.roles.cache.has(role.id)) {
+                await interaction.reply({ content: "The user already has the role.", ephemeral: true });
+                return;
+            }
 
             try {
                 await target.roles.add(role);
@@ -44,7 +54,6 @@ module.exports = {
             } catch (err) {
                 const errorMsg = await interaction.reply({ content: `An error occurred while giving ${bold(target.user.tag)} the role ${bold(role.name)}.`, fetchReply: true });
                 errorMsg.react("❌");
-                console.error(err);
             }
         }
 
@@ -59,6 +68,16 @@ module.exports = {
 
             if (!role) {
                 await interaction.reply({ content: "Please specify a role to remove from the user.", ephemeral: true });
+                return;
+            }
+
+            if (role.comparePositionTo(interaction.member.roles.highest) >= 0) {
+                await interaction.reply({ content: "You cannot remove a role higher than or equal to your highest role.", ephemeral: true });
+                return;
+            }
+
+            if (!target.roles.cache.has(role.id)) {
+                await interaction.reply({ content: "The user doesn't have the role.", ephemeral: true });
                 return;
             }
 

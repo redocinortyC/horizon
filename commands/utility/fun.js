@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, bold } = require("@discordjs/builders");
-const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+const { MessageEmbed } = require("discord.js");
 const axios = require("axios");
 
 // Moderation commands
@@ -20,6 +20,10 @@ module.exports = {
                 .setName("8ball")
                 .setDescription("Ask the magic 8ball a question.")
                 .addStringOption(option => option.setName("question").setDescription("The question to ask the magic 8ball")))
+        .addSubcommand((subcommand) =>
+            subcommand
+              .setName("joke")
+              .setDescription("Get a random joke."))
         .addSubcommand(subcommand =>
             subcommand
                 .setName("horizon")
@@ -37,19 +41,13 @@ module.exports = {
         const subcommand = interaction.options.getSubcommand();
 
         if (subcommand === "roll") {
-            await interaction.reply("Rolling a die...");
-            await wait(2000);
-            
             const die = Math.floor(Math.random() * 6) + 1;
-            interaction.editReply({ content: `🎲 You rolled a ${die}!` });
+            interaction.reply({ content: `🎲 You rolled a ${die}!` });
         }
 
         if (subcommand === "flip") {
-            await interaction.reply("Flipping a coin...");
-            await wait(2000);
-            
             const coin = Math.random() < 0.5 ? "heads" : "tails";
-            interaction.editReply({ content: `🪙 You flipped ${coin}!` });
+            interaction.reply({ content: `🪙 You flipped ${coin}!` });
         }
 
         if (subcommand === "8ball") {
@@ -59,11 +57,8 @@ module.exports = {
                 return;
             }
 
-            await interaction.reply("Asking the magic 8ball the question...");
-            await wait(2000);
-
             if (question.toLowerCase().includes("what do you get when you multiply six by nine")) {
-                interaction.editReply({ content: "You asked the magic 8ball the Ultimate Question of Life, the Universe, and Everything.\nThe magic 8ball says: Six by nine. Forty-two. 🛸" });
+                interaction.reply({ content: "You asked the magic 8ball the Ultimate Question of Life, the Universe, and Everything.\nThe magic 8ball says: Six by nine. Forty-two. 🛸" });
             } else {
                 const answers = [
                     "It is certain.",
@@ -89,9 +84,33 @@ module.exports = {
                 ];
 
                 const answer = answers[Math.floor(Math.random() * answers.length)];
-                await interaction.editReply({ content: `You asked: ${question}\n🎱 The magic 8ball says: ${answer}` });
+                await interaction.reply({ content: `You asked: ${question}\n🎱 The magic 8ball says: ${answer}` });
             }
         }
+
+        if (subcommand === "joke") {
+            let response = await axios.get("https://v2.jokeapi.dev/joke/Any?safe-mode");
+            let joke;
+
+            if (response.data.type === "twopart") {
+                joke = response.data.setup + " " + `${bold(response.data.delivery)}`;
+            } else if (response.data.type === "single") {
+                joke = response.data.joke;
+            }
+            
+            // embed
+            const embed = new MessageEmbed()
+                .setTitle(response.data.category)
+                .setDescription(joke)
+                .setColor(Math.floor(Math.random() * 16777215).toString(16))
+                .setFooter({
+                    text: "Powered by https://v2.jokeapi.dev",
+                    icon_url: "https://sv443.net/resources/images/jokeapi.png"
+                });
+            
+            await interaction.reply({ content: "✨ I found a joke!", embeds: [embed] });
+        }
+
 
         if (subcommand === "horizon") {
             const type = interaction.options.getString("type");
@@ -99,11 +118,8 @@ module.exports = {
                 await interaction.reply({ content: "Please specify a choice.", ephemeral: true });
                 return;
             }
-
-            await interaction.reply(`Getting a random picture of a ${type}...`);
-            await wait(2000);
             
-            const response = await axios.get("https://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?", {
+            const horizon_response = await axios.get("https://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?", {
                 params: {
                     tags: `${type} photo`,
                     tagmode: "any",
@@ -114,23 +130,33 @@ module.exports = {
                 console.error(err);
             });
 
-            const data = JSON.parse(response.data.replace(/^\(|\)$/g, ""));
+            const data = JSON.parse(horizon_response.data.replace(/^\(|\)$/g, ""));
             const photo = data.items[Math.floor(Math.random() * data.items.length)];
 
-            const embed = {
-                color: type === "sunrise" ? 0xFFFF00 : 0xFFA500,
-                title: `${photo.title}`,
-                url: `${photo.link}`,
-                image: {
-                    url: `${photo.media.m}`
-                },
-                timestamp: photo.date_taken,
-                footer: {
-                    text: `Photo from Flickr - uploaded by ${photo.author}`
-                }
-            };
+            // const embed = {
+            //     color: type === "sunrise" ? 0xFFFF00 : 0xFFA500,
+            //     title: `${photo.title}`,
+            //     url: `${photo.link}`,
+            //     image: {
+            //         url: `${photo.media.m}`
+            //     },
+            //     timestamp: photo.date_taken,
+            //     footer: {
+            //         text: `Photo from Flickr - uploaded by ${photo.author}`
+            //     }
+            // };
 
-            await interaction.editReply({ content: `🌄 I found a ${type}!`, embeds: [embed] });
+            const horizon_embed = new MessageEmbed()
+                .setColor(type === "sunrise" ? 0xFFFF00 : 0xFFA500)
+                .setTitle(`${photo.title}`)
+                .setURL(`${photo.link}`)
+                .setImage(`${photo.media.m}`)
+                .setTimestamp(photo.date_taken)
+                .setFooter({
+                    text: `Photo from Flickr - uploaded by ${photo.author}`
+                });
+
+            await interaction.reply({ content: `🌄 I found a ${type}!`, embeds: [horizon_embed] });
         }
 	}
 };
