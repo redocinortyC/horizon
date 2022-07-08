@@ -5,12 +5,12 @@ const chalk = require("chalk");
 module.exports = {
 	name: "interactionCreate",
 	async execute(interaction) {
-        console.log(chalk.magenta("[INTERACTION] %s executed the %s command in #%s."), interaction.user.tag, interaction.commandName, interaction.channel.name);
         if (!interaction.isCommand()) return;
         const command = client.commands.get(interaction.commandName);
         if (!command) return;
 
         try {
+            console.log(chalk.magenta("[INTERACTION] %s executed the %s command in #%s."), interaction.user.tag, interaction.commandName, interaction.channel.name);
             await command.execute(interaction);
         } catch (error) {
             console.error(error);
