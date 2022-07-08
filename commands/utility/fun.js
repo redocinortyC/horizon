@@ -24,6 +24,10 @@ module.exports = {
             subcommand
               .setName("joke")
               .setDescription("Get a random joke."))
+        .addSubcommand((subcommand) =>
+            subcommand
+              .setName("quote")
+              .setDescription("Get inspired :sparkles:"))
         .addSubcommand(subcommand =>
             subcommand
                 .setName("horizon")
@@ -105,7 +109,7 @@ module.exports = {
                 .setColor(Math.floor(Math.random() * 16777215).toString(16))
                 .setFooter({
                     text: "Powered by https://v2.jokeapi.dev",
-                    iconURL: "https://sv443.net/resources/images/jokeapi.png"
+                    icon_url: "https://sv443.net/resources/images/jokeapi.png"
                 });
             
             await interaction.reply({ content: "✨ I found a joke!", embeds: [embed] });
@@ -153,11 +157,31 @@ module.exports = {
                 .setImage(`${photo.media.m}`)
                 .setTimestamp(photo.date_taken)
                 .setFooter({
-                    text: `Photo from Flickr - uploaded by ${photo.author}`,
-                    iconURL: "https://www.flickr.com/favicon.ico"
+                    text: `Photo from Flickr - uploaded by ${photo.author}`
                 });
 
             await interaction.reply({ content: `🌄 I found a ${type}!`, embeds: [horizon_embed] });
         }
+        if (subcommand === "quote"){
+            const quote_response = await axios.get("https://api.quotable.io/random").catch(err => {
+                interaction.editReply({ content: "Error getting a quote.", ephemeral: true });
+                console.error(err);
+            });
+
+            const data = quote_response.data;
+            const quote = data.content;
+            const author = data.author;
+
+            const quote_embed = new MessageEmbed()
+                .setTitle(`${quote}`)
+                .setDescription(`${author}`)
+                .setColor(Math.floor(Math.random() * 16777215).toString(16))
+                .setFooter({
+                    text: "Powered by https://quotable.io",
+                });
+
+            await interaction.reply({ content: "💬 I found a quote!", embeds: [quote_embed] });
+        }
 	}
 };
+
