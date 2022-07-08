@@ -25,12 +25,12 @@ module.exports = {
                 .setName("horizon")
                 .setDescription("See some sunrises and sunsets.")
                 .addStringOption(option =>
-                    option.setName('type')
-                        .setDescription('Sunrise/sunset')
+                    option.setName("type")
+                        .setDescription("Sunrise/sunset")
                         .setRequired(true)
                         .addChoices(
-                            { name: 'sunrise', value: 'sunrise' },
-                            { name: 'sunset', value: 'sunset' }
+                            { name: "sunrise", value: "sunrise" },
+                            { name: "sunset", value: "sunset" }
                         ))),
 
 	async execute(interaction) {

@@ -14,6 +14,6 @@ module.exports = {
 		const roundtrip = sent.createdTimestamp - interaction.createdTimestamp;
 		const heartbeat = client.ws.ping;
 
-        interaction.editReply(`🏓 Pong!\nRoundtrip latency: ${roundtrip}ms\nWebsocket heartbeat: ${heartbeat}ms`);
+        await interaction.editReply(`🏓 Pong!\nRoundtrip latency: ${roundtrip}ms\nWebsocket heartbeat: ${heartbeat}ms`);
 	}
 };
