@@ -115,6 +115,26 @@ module.exports = {
             await interaction.reply({ content: "✨ I found a joke!", embeds: [embed] });
         }
 
+        if (subcommand === "quote"){
+            const quote_response = await axios.get("https://api.quotable.io/random").catch(err => {
+                interaction.editReply({ content: "Error getting a quote.", ephemeral: true });
+                console.error(err);
+            });
+
+            const data = quote_response.data;
+            const quote = data.content;
+            const author = data.author;
+
+            const quote_embed = new MessageEmbed()
+                .setTitle(`${author}`)
+                .setDescription(`${quote}`)
+                .setColor(Math.floor(Math.random() * 16777215).toString(16))
+                .setFooter({
+                    text: "Powered by https://quotable.io",
+                });
+
+            await interaction.reply({ content: "💬 I found a quote!", embeds: [quote_embed] });
+        }
 
         if (subcommand === "horizon") {
             const type = interaction.options.getString("type");
@@ -137,19 +157,6 @@ module.exports = {
             const data = JSON.parse(horizon_response.data.replace(/^\(|\)$/g, ""));
             const photo = data.items[Math.floor(Math.random() * data.items.length)];
 
-            // const embed = {
-            //     color: type === "sunrise" ? 0xFFFF00 : 0xFFA500,
-            //     title: `${photo.title}`,
-            //     url: `${photo.link}`,
-            //     image: {
-            //         url: `${photo.media.m}`
-            //     },
-            //     timestamp: photo.date_taken,
-            //     footer: {
-            //         text: `Photo from Flickr - uploaded by ${photo.author}`
-            //     }
-            // };
-
             const horizon_embed = new MessageEmbed()
                 .setColor(type === "sunrise" ? 0xFFFF00 : 0xFFA500)
                 .setTitle(`${photo.title}`)
@@ -162,26 +169,6 @@ module.exports = {
                 });
 
             await interaction.reply({ content: `🌄 I found a ${type}!`, embeds: [horizon_embed] });
-        }
-        if (subcommand === "quote"){
-            const quote_response = await axios.get("https://api.quotable.io/random").catch(err => {
-                interaction.editReply({ content: "Error getting a quote.", ephemeral: true });
-                console.error(err);
-            });
-
-            const data = quote_response.data;
-            const quote = data.content;
-            const author = data.author;
-
-            const quote_embed = new MessageEmbed()
-                .setTitle(`${quote}`)
-                .setDescription(`${author}`)
-                .setColor(Math.floor(Math.random() * 16777215).toString(16))
-                .setFooter({
-                    text: "Powered by https://quotable.io",
-                });
-
-            await interaction.reply({ content: "💬 I found a quote!", embeds: [quote_embed] });
         }
 	}
 };
