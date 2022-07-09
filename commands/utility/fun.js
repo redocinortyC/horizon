@@ -22,14 +22,21 @@ module.exports = {
                 .setDescription("Get a random quote."))
         .addSubcommand((subcommand) =>
             subcommand
-                .setName("pet")
-                .setDescription("Get a random pet pic.")
+                .setName("animal")
+                .setDescription("Get a random animal fact and image.")
                 .addStringOption(option => option.setName("type")
-                    .setDescription("The type of pet to get.")
+                    .setDescription("The type of animal to get.")
                     .setRequired(true)
                     .addChoices(
                         { name: "cat", value: "cat" },
                         { name: "dog", value: "dog" },
+                        { name: "birb", value: "birb" },
+                        { name: "panda", value: "panda" },
+                        { name: "red panda", value: "redpanda" },
+                        { name: "fox", value: "fox" },
+                        { name: "koala", value: "koala" },
+                        { name: "raccoon", value: "raccoon" },
+                        { name: "kangaroo", value: "kangaroo" },
                     )))
         .addSubcommand(subcommand =>
             subcommand
@@ -90,7 +97,7 @@ module.exports = {
             await interaction.reply({ content: "💬 I found a quote!", embeds: [quote_embed] });
         }
 
-        if (subcommand === "pet") {
+        if (subcommand === "animal") {
             const type = interaction.options.getString("type");
             if (!type) {
                 await interaction.reply({ content: "Please specify a type.", ephemeral: true });
@@ -98,45 +105,129 @@ module.exports = {
             }
 
             if (type === "cat") {
-                const cat_response = await axios.get("https://aws.random.cat/meow").catch(err => {
-                    interaction.editReply({ content: "Error getting a cat.", ephemeral: true });
-                    console.error(err);
-                });
-
-                const cat_data = cat_response.data;
-                const cat_url = cat_data.file;
-
-                const cat_embed = new MessageEmbed()
-                    .setTitle("Cat")
-                    .setURL(cat_url)
+                const response = await axios.get("https://some-random-api.ml/animal/cat");
+                const embed = new MessageEmbed()
+                    .setTitle("Random cat fact")
+                    .setImage(response.data.image)
+                    .setDescription(response.data.fact)
                     .setColor(Math.floor(Math.random() * 16777215).toString(16))
-                    .setImage(cat_url)
                     .setFooter({
-                        text: "Powered by https://aws.random.cat",
+                        text: "Powered by https://some-random-api.ml",
+                        iconURL: "https://i.some-random-api.ml/logo.png",
                     });
-
-                await interaction.reply({ content: "🐱 I found a cat!", embeds: [cat_embed] });
+                await interaction.reply({ content: "🐱 I found a cat!", embeds: [embed] });
             }
 
             if (type === "dog") {
-                const dog_response = await axios.get("https://dog.ceo/api/breeds/image/random").catch(err => {
-                    interaction.editReply({ content: "Error getting a dog.", ephemeral: true });
-                    console.error(err);
-                });
-
-                const dog_data = dog_response.data;
-                const dog_url = dog_data.message;
-
-                const dog_embed = new MessageEmbed()
-                    .setTitle("Dog")
-                    .setURL(dog_url)
+                const response = await axios.get("https://some-random-api.ml/animal/dog");
+                const embed = new MessageEmbed()
+                    .setTitle("Random dog fact")
+                    .setImage(response.data.image)
+                    .setDescription(response.data.fact)
                     .setColor(Math.floor(Math.random() * 16777215).toString(16))
-                    .setImage(dog_url)
                     .setFooter({
-                        text: "Powered by https://dog.ceo",
+                        text: "Powered by https://some-random-api.ml",
+                        iconURL: "https://i.some-random-api.ml/logo.png",
                     });
+                await interaction.reply({ content: "🐶 I found a dog!", embeds: [embed] });
+            }
 
-                await interaction.reply({ content: "🐶 I found a dog!", embeds: [dog_embed] });
+            if (type === "birb") {
+                const response = await axios.get("https://some-random-api.ml/animal/bird");
+                const embed = new MessageEmbed()
+                    .setTitle("Random bird fact")
+                    .setImage(response.data.image)
+                    .setDescription(response.data.fact)
+                    .setColor(Math.floor(Math.random() * 16777215).toString(16))
+                    .setFooter({
+                        text: "Powered by https://some-random-api.ml",
+                        iconURL: "https://i.some-random-api.ml/logo.png",
+                    });
+                await interaction.reply({ content: "🐦 I found a bird!", embeds: [embed] });
+            }
+
+            if (type === "panda") {
+                const response = await axios.get("https://some-random-api.ml/animal/panda");
+                const embed = new MessageEmbed()
+                    .setTitle("Random panda fact")
+                    .setImage(response.data.image)
+                    .setDescription(response.data.fact)
+                    .setColor(Math.floor(Math.random() * 16777215).toString(16))
+                    .setFooter({
+                        text: "Powered by https://some-random-api.ml",
+                        iconURL: "https://i.some-random-api.ml/logo.png",
+                    });
+                await interaction.reply({ content: "🐼 I found a panda!", embeds: [embed] });
+            }
+
+            if (type === "redpanda") {
+                const response = await axios.get("https://some-random-api.ml/animal/redpanda");
+                const embed = new MessageEmbed()
+                    .setTitle("Random red panda fact")
+                    .setImage(response.data.image)
+                    .setDescription(response.data.fact)
+                    .setColor(Math.floor(Math.random() * 16777215).toString(16))
+                    .setFooter({
+                        text: "Powered by https://some-random-api.ml",
+                        iconURL: "https://i.some-random-api.ml/logo.png",
+                    });
+                await interaction.reply({ content: "🐼 I found a red panda!", embeds: [embed] });
+            }
+
+            if (type === "fox") {
+                const response = await axios.get("https://some-random-api.ml/animal/fox");
+                const embed = new MessageEmbed()
+                    .setTitle("Random fox fact")
+                    .setImage(response.data.image)
+                    .setDescription(response.data.fact)
+                    .setColor(Math.floor(Math.random() * 16777215).toString(16))
+                    .setFooter({
+                        text: "Powered by https://some-random-api.ml",
+                        iconURL: "https://i.some-random-api.ml/logo.png",
+                    });
+                await interaction.reply({ content: "🦊 I found a fox!", embeds: [embed] });
+            }
+
+            if (type === "koala") {
+                const response = await axios.get("https://some-random-api.ml/animal/koala");
+                const embed = new MessageEmbed()
+                    .setTitle("Random koala fact")
+                    .setImage(response.data.image)
+                    .setDescription(response.data.fact)
+                    .setColor(Math.floor(Math.random() * 16777215).toString(16))
+                    .setFooter({
+                        text: "Powered by https://some-random-api.ml",
+                        iconURL: "https://i.some-random-api.ml/logo.png",
+                    });
+                await interaction.reply({ content: "🐨 I found a koala!", embeds: [embed] });
+            }
+
+            if (type === "raccoon") {
+                const response = await axios.get("https://some-random-api.ml/animal/raccoon");
+                const embed = new MessageEmbed()
+                    .setTitle("Random raccoon fact")
+                    .setImage(response.data.image)
+                    .setDescription(response.data.fact)
+                    .setColor(Math.floor(Math.random() * 16777215).toString(16))
+                    .setFooter({
+                        text: "Powered by https://some-random-api.ml",
+                        iconURL: "https://i.some-random-api.ml/logo.png",
+                    });
+                await interaction.reply({ content: "🦝 I found a raccoon!", embeds: [embed] });
+            }
+
+            if (type === "kangaroo") {
+                const response = await axios.get("https://some-random-api.ml/animal/kangaroo");
+                const embed = new MessageEmbed()
+                    .setTitle("Random kangaroo fact")
+                    .setImage(response.data.image)
+                    .setDescription(response.data.fact)
+                    .setColor(Math.floor(Math.random() * 16777215).toString(16))
+                    .setFooter({
+                        text: "Powered by https://some-random-api.ml",
+                        iconURL: "https://i.some-random-api.ml/logo.png",
+                    });
+                await interaction.reply({ content: "🦒 I found a kangaroo!", embeds: [embed] });
             }
         }
 
