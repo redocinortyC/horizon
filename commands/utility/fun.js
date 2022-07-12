@@ -14,14 +14,6 @@ module.exports = {
                 .addStringOption(option => option.setName("question").setRequired(true).setDescription("The question to ask the magic 8ball")))
         .addSubcommand((subcommand) =>
             subcommand
-                .setName("joke")
-                .setDescription("Get a random joke."))
-        .addSubcommand((subcommand) =>
-            subcommand
-                .setName("quote")
-                .setDescription("Get a random quote."))
-        .addSubcommand((subcommand) =>
-            subcommand
                 .setName("animal")
                 .setDescription("Get a random animal fact and image.")
                 .addStringOption(option => option.setName("type")
@@ -38,6 +30,10 @@ module.exports = {
                         { name: "raccoon", value: "raccoon" },
                         { name: "kangaroo", value: "kangaroo" },
                     )))
+        .addSubcommand((subcommand) =>
+            subcommand
+                .setName("fact")
+                .setDescription("Get a random fact."))
         .addSubcommand(subcommand =>
             subcommand
                 .setName("horizon")
@@ -49,53 +45,22 @@ module.exports = {
                         .addChoices(
                             { name: "sunrise", value: "sunrise" },
                             { name: "sunset", value: "sunset" }
-                        ))),
+                        )))
+        .addSubcommand((subcommand) =>
+            subcommand
+                .setName("joke")
+                .setDescription("Get a random joke."))
+        .addSubcommand((subcommand) =>
+            subcommand
+                .setName("meme")
+                .setDescription("Get a random meme."))
+        .addSubcommand((subcommand) =>
+            subcommand
+                .setName("quote")
+                .setDescription("Get a random quote.")),
 
 	async execute(interaction) {
         const subcommand = interaction.options.getSubcommand();
-
-        if (subcommand === "joke") {
-            let response = await axios.get("https://v2.jokeapi.dev/joke/Any?safe-mode");
-            let joke;
-
-            if (response.data.type === "twopart") {
-                joke = response.data.setup + " " + `${bold(response.data.delivery)}`;
-            } else if (response.data.type === "single") {
-                joke = response.data.joke;
-            }
-            
-            const embed = new MessageEmbed()
-                .setTitle(response.data.category)
-                .setDescription(joke)
-                .setColor(Math.floor(Math.random() * 0xFFFFFF))
-                .setFooter({
-                    text: "Powered by https://v2.jokeapi.dev",
-                    iconURL: "https://sv443.net/resources/images/jokeapi.png"
-                });
-            
-            await interaction.reply({ content: "✨ I found a joke!", embeds: [embed] });
-        }
-
-        if (subcommand === "quote"){
-            const quote_response = await axios.get("https://api.quotable.io/random").catch(err => {
-                interaction.editReply({ content: "Error getting a quote.", ephemeral: true });
-                console.error(err);
-            });
-
-            const data = quote_response.data;
-            const quote = data.content;
-            const author = data.author;
-
-            const quote_embed = new MessageEmbed()
-                .setTitle(`${author}`)
-                .setDescription(`${quote}`)
-                .setColor(Math.floor(Math.random() * 0xFFFFFF))
-                .setFooter({
-                    text: "Powered by https://quotable.io",
-                });
-
-            await interaction.reply({ content: "💬 I found a quote!", embeds: [quote_embed] });
-        }
 
         if (subcommand === "animal") {
             const type = interaction.options.getString("type");
@@ -227,6 +192,21 @@ module.exports = {
             }
         }
 
+        if (subcommand === "fact") {
+            const response = await axios.get("https://uselessfacts.jsph.pl/random.json?language=en");
+            const fact = response.data.text;
+
+            const embed = new MessageEmbed()
+                .setTitle("Random fact")
+                .setDescription(fact)
+                .setColor(Math.floor(Math.random() * 0xFFFFFF))
+                .setFooter({
+                    text: "Powered by https://uselessfacts.jsph.pl"
+                });
+
+            await interaction.reply({ embeds: [embed] });
+        }
+
         if (subcommand === "horizon") {
             const type = interaction.options.getString("type");
             
@@ -256,6 +236,69 @@ module.exports = {
                 });
 
             await interaction.reply({ content: `🌄 I found a ${type}!`, embeds: [horizon_embed] });
+        }
+
+        if (subcommand === "joke") {
+            let response = await axios.get("https://v2.jokeapi.dev/joke/Any?safe-mode");
+            let joke;
+
+            if (response.data.type === "twopart") {
+                joke = response.data.setup + " " + `${bold(response.data.delivery)}`;
+            } else if (response.data.type === "single") {
+                joke = response.data.joke;
+            }
+            
+            const embed = new MessageEmbed()
+                .setTitle(response.data.category)
+                .setDescription(joke)
+                .setColor(Math.floor(Math.random() * 0xFFFFFF))
+                .setFooter({
+                    text: "Powered by https://v2.jokeapi.dev",
+                    iconURL: "https://sv443.net/resources/images/jokeapi.png"
+                });
+            
+            await interaction.reply({ content: "✨ I found a joke!", embeds: [embed] });
+        }
+
+        if (subcommand === "meme") {
+            const response = await axios.get("https://meme-api.herokuapp.com/gimme");
+            const meme = response.data;
+
+            if (meme.nsfw) {
+                return this.run(interaction, "meme");
+            }
+
+            const embed = new MessageEmbed()
+                .setTitle(meme.title)
+                .setDescription(`By ${meme.author} from r/${meme.subreddit}`)
+                .setImage(meme.url)
+                .setColor(Math.floor(Math.random() * 0xFFFFFF))
+                .setFooter({
+                    text: `Powered by https://meme-api.herokuapp.com`
+                });
+
+            await interaction.reply({ content: "🤣 I found a meme!", embeds: [embed] });
+        }
+
+        if (subcommand === "quote"){
+            const quote_response = await axios.get("https://api.quotable.io/random").catch(err => {
+                interaction.editReply({ content: "Error getting a quote.", ephemeral: true });
+                console.error(err);
+            });
+
+            const data = quote_response.data;
+            const quote = data.content;
+            const author = data.author;
+
+            const quote_embed = new MessageEmbed()
+                .setTitle(`${author}`)
+                .setDescription(`${quote}`)
+                .setColor(Math.floor(Math.random() * 0xFFFFFF))
+                .setFooter({
+                    text: "Powered by https://quotable.io",
+                });
+
+            await interaction.reply({ content: "💬 I found a quote!", embeds: [quote_embed] });
         }
 	}
 };
