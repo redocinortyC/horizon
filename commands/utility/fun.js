@@ -161,7 +161,7 @@ module.exports = {
             }
 
             if (type === "redpanda") {
-                const response = await axios.get("https://some-random-api.ml/animal/redpanda");
+                const response = await axios.get("https://some-random-api.ml/animal/red_panda");
                 const embed = new MessageEmbed()
                     .setTitle("Random red panda fact")
                     .setImage(response.data.image)
