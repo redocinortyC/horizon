@@ -33,6 +33,16 @@ CLIENT_ID=<your client ID>
 GUILD_ID=<your guild ID>
 ```
 
+You will also need a `config.json` file in the `root` directory. This file contains the bot's configuration:
+
+```json
+{
+    "cooldown_duration": 10000
+}
+```
+
+Note that `config.json` is not required. If it is not present, the default cooldown duration will be used. The default cooldown duration is 10 seconds. Additionally, this is still an experimental feature, and new values may be added in the future.
+
 Finally, you can start the bot by running
 
 ```bash
