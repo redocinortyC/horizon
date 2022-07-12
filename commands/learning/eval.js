@@ -11,9 +11,15 @@ module.exports = {
 		
 	async execute(interaction) {
 		const expression = interaction.options.getString("expression");
-
+		let result = 0;
+		
 		// Calculate and round the result
-		const result = Math.round(mathjs.evaluate(expression) * 100) / 100;
+		try {
+			result = Math.round(mathjs.evaluate(expression) * 100) / 100;
+		} catch (error) {
+			await interaction.reply({ content: "Error: " + error.message, ephemeral: true });
+			return;
+		}
 
 		const embed = new MessageEmbed()
 			.setTitle(`What is ${expression}?`)
