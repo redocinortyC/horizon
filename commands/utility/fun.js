@@ -62,6 +62,41 @@ module.exports = {
 	async execute(interaction) {
         const subcommand = interaction.options.getSubcommand();
 
+        if (subcommand === "8ball") {
+            const question = interaction.options.getString("question");
+
+            if (!question.endsWith("?")) {
+                await interaction.reply({ content: "Questions end with a question mark.", ephemeral: true });
+                return;
+            }
+
+            const responses = [
+                "As I see it, yes.",
+                "It is certain.",
+                "It is decidedly so.",
+                "Most likely.",
+                "Outlook good.",
+                "Signs point to yes.",
+                "Without a doubt.",
+                "Yes.",
+                "Yes - definitely.",
+                "You may rely on it.",
+                "Reply hazy, try again.",
+                "Ask again later.",
+                "Better not tell you now.",
+                "Cannot predict now.",
+                "Concentrate and ask again.",
+                "Don't count on it.",
+                "My reply is no.",
+                "My sources say no.",
+                "Outlook not so good.",
+                "Very doubtful.",
+            ]
+
+            const response = responses[Math.floor(Math.random() * responses.length)];
+            await interaction.reply(`> ${interaction.user.toString()} asked: ${question}\n${bold(response)}`);
+        }
+
         if (subcommand === "animal") {
             const type = interaction.options.getString("type");
 
