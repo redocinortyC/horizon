@@ -28,8 +28,14 @@ module.exports = {
                 interaction.reply(`You can only use this command once every ${cooldown_duration / 1000} seconds.`);
                 return;
             } else {
-                console.log(chalk.magenta("[INTERACTION] %s executed the %s command in #%s."), interaction.user.tag, interaction.commandName, interaction.channel.name);
-                await command.execute(interaction);
+                
+                try {
+                    await command.execute(interaction);
+                    console.log(chalk.magenta("[INTERACTION] %s executed the %s command in #%s."), interaction.user.tag, interaction.commandName, interaction.channel.name);
+                } catch (err) {
+                    console.error(err);
+                }
+
                 cooldowns.set(cooldown.user + cooldown.command);
                 setTimeout(() => {
                     cooldowns.delete(cooldown.user + cooldown.command);

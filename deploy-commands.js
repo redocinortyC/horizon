@@ -36,9 +36,28 @@ for (const folder of commandFolders) {
 		console.log(chalk.green("[DEPLOY] Successfully refreshed application (/) commands!"));
 		
 		// print out all commands
-		console.log(chalk.cyan("\n[DEPLOY] Registered commands:"));
+		console.log(chalk.underline("\n[DEPLOY] Registered commands:"));
 		commands.forEach(command => {
 			console.log(chalk.cyan(`[COMMAND] - ${command.name}`));
+
+			// A complete log of the command, its subcommands and their respective options
+			if (command.options) {
+				command.options.forEach(option => {
+					switch (option.type) {
+						case 1:
+							console.log(chalk.cyan(`    [SUBCOMMAND] - ${option.name}`));
+							if (option.options) {
+								option.options.forEach(option => {
+									console.log(chalk.cyan(`            [OPTION] - ${option.name}`));
+								});
+							}
+							break;
+						default:
+							console.log(chalk.cyan(`    [OPTION] - ${option.name}`));
+							break;
+					}
+				});
+			}
 		});
 
 	} catch (error) {
