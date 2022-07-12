@@ -18,9 +18,9 @@ module.exports = {
 			client.user.setStatus((now > sunrise && now < sunset) ? "online" : "idle");
 
 			if (now > sunrise && now < sunset) {
-				status = "the day go by";
+				status = "the day goes by";
 			} else {
-				status = "the night fall";
+				status = "the night falls";
 			}
 
 			client.user.setActivity(status, { type: "WATCHING" });

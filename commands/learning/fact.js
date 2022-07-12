@@ -15,7 +15,7 @@ module.exports = {
         const embed = new MessageEmbed()
             .setTitle("Random fact")
             .setDescription(fact)
-            .setColor(Math.floor(Math.random() * 16777215).toString(16))
+            .setColor(Math.floor(Math.random() * 0xFFFFFF))
             .setFooter({
                 text: "Powered by https://uselessfacts.jsph.pl"
             });

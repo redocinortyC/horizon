@@ -10,14 +10,14 @@ module.exports = {
             subcommand
                 .setName("add")
                 .setDescription("Adds a role to a user.")
-                .addUserOption(option => option.setName("target").setDescription("The user to give a role to"))
-                .addRoleOption(option => option.setName("role").setDescription("The role to give the user")))
+                .addUserOption(option => option.setName("target").setRequired(true).setDescription("The user to give a role to"))
+                .addRoleOption(option => option.setName("role").setRequired(true).setDescription("The role to give the user")))
         .addSubcommand(subcommand =>
             subcommand
                 .setName("remove")
                 .setDescription("Removes a role from a user.")
-                .addUserOption(option => option.setName("target").setDescription("The user to remove a role from"))
-                .addRoleOption(option => option.setName("role").setDescription("The role to remove from the user")))
+                .addUserOption(option => option.setName("target").setRequired(true).setDescription("The user to remove a role from"))
+                .addRoleOption(option => option.setName("role").setRequired(true).setDescription("The role to remove from the user")))
         .setDefaultMemberPermissions(PermissionFlagsBits.ManageRoles),
 		
 	async execute(interaction) {
@@ -26,16 +26,6 @@ module.exports = {
         if (subcommand === "add") {
             const target = interaction.options.getMember("target");
             const role = interaction.options.getRole("role");
-            
-            if (!target) {
-                await interaction.reply({ content: "Please specify a user to give a role to.", ephemeral: true });
-                return;
-            }
-
-            if (!role) {
-                await interaction.reply({ content: "Please specify a role to give the user.", ephemeral: true });
-                return;
-            }
             
             if (role.comparePositionTo(interaction.member.roles.highest) >= 0) {
                 await interaction.reply({ content: "You cannot give a role higher than or equal to your highest role.", ephemeral: true });
@@ -60,16 +50,6 @@ module.exports = {
         if (subcommand === "remove") {
             const target = interaction.options.getMember("target");
             const role = interaction.options.getRole("role");
-            
-            if (!target) {
-                await interaction.reply({ content: "Please specify a user to remove a role from.", ephemeral: true });
-                return;
-            }
-
-            if (!role) {
-                await interaction.reply({ content: "Please specify a role to remove from the user.", ephemeral: true });
-                return;
-            }
 
             if (role.comparePositionTo(interaction.member.roles.highest) >= 0) {
                 await interaction.reply({ content: "You cannot remove a role higher than or equal to your highest role.", ephemeral: true });

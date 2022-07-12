@@ -11,7 +11,7 @@ module.exports = {
             subcommand
                 .setName("8ball")
                 .setDescription("Ask the magic 8ball a question.")
-                .addStringOption(option => option.setName("question").setDescription("The question to ask the magic 8ball")))
+                .addStringOption(option => option.setName("question").setRequired(true).setDescription("The question to ask the magic 8ball")))
         .addSubcommand((subcommand) =>
             subcommand
                 .setName("joke")
@@ -67,7 +67,7 @@ module.exports = {
             const embed = new MessageEmbed()
                 .setTitle(response.data.category)
                 .setDescription(joke)
-                .setColor(Math.floor(Math.random() * 16777215).toString(16))
+                .setColor(Math.floor(Math.random() * 0xFFFFFF))
                 .setFooter({
                     text: "Powered by https://v2.jokeapi.dev",
                     iconURL: "https://sv443.net/resources/images/jokeapi.png"
@@ -89,7 +89,7 @@ module.exports = {
             const quote_embed = new MessageEmbed()
                 .setTitle(`${author}`)
                 .setDescription(`${quote}`)
-                .setColor(Math.floor(Math.random() * 16777215).toString(16))
+                .setColor(Math.floor(Math.random() * 0xFFFFFF))
                 .setFooter({
                     text: "Powered by https://quotable.io",
                 });
@@ -99,10 +99,6 @@ module.exports = {
 
         if (subcommand === "animal") {
             const type = interaction.options.getString("type");
-            if (!type) {
-                await interaction.reply({ content: "Please specify a type.", ephemeral: true });
-                return;
-            }
 
             if (type === "cat") {
                 const response = await axios.get("https://some-random-api.ml/animal/cat");
@@ -110,7 +106,7 @@ module.exports = {
                     .setTitle("Random cat fact")
                     .setImage(response.data.image)
                     .setDescription(response.data.fact)
-                    .setColor(Math.floor(Math.random() * 16777215).toString(16))
+                    .setColor(Math.floor(Math.random() * 0xFFFFFF))
                     .setFooter({
                         text: "Powered by https://some-random-api.ml",
                         iconURL: "https://i.some-random-api.ml/logo.png",
@@ -124,7 +120,7 @@ module.exports = {
                     .setTitle("Random dog fact")
                     .setImage(response.data.image)
                     .setDescription(response.data.fact)
-                    .setColor(Math.floor(Math.random() * 16777215).toString(16))
+                    .setColor(Math.floor(Math.random() * 0xFFFFFF))
                     .setFooter({
                         text: "Powered by https://some-random-api.ml",
                         iconURL: "https://i.some-random-api.ml/logo.png",
@@ -138,7 +134,7 @@ module.exports = {
                     .setTitle("Random bird fact")
                     .setImage(response.data.image)
                     .setDescription(response.data.fact)
-                    .setColor(Math.floor(Math.random() * 16777215).toString(16))
+                    .setColor(Math.floor(Math.random() * 0xFFFFFF))
                     .setFooter({
                         text: "Powered by https://some-random-api.ml",
                         iconURL: "https://i.some-random-api.ml/logo.png",
@@ -152,7 +148,7 @@ module.exports = {
                     .setTitle("Random panda fact")
                     .setImage(response.data.image)
                     .setDescription(response.data.fact)
-                    .setColor(Math.floor(Math.random() * 16777215).toString(16))
+                    .setColor(Math.floor(Math.random() * 0xFFFFFF))
                     .setFooter({
                         text: "Powered by https://some-random-api.ml",
                         iconURL: "https://i.some-random-api.ml/logo.png",
@@ -166,7 +162,7 @@ module.exports = {
                     .setTitle("Random red panda fact")
                     .setImage(response.data.image)
                     .setDescription(response.data.fact)
-                    .setColor(Math.floor(Math.random() * 16777215).toString(16))
+                    .setColor(Math.floor(Math.random() * 0xFFFFFF))
                     .setFooter({
                         text: "Powered by https://some-random-api.ml",
                         iconURL: "https://i.some-random-api.ml/logo.png",
@@ -180,7 +176,7 @@ module.exports = {
                     .setTitle("Random fox fact")
                     .setImage(response.data.image)
                     .setDescription(response.data.fact)
-                    .setColor(Math.floor(Math.random() * 16777215).toString(16))
+                    .setColor(Math.floor(Math.random() * 0xFFFFFF))
                     .setFooter({
                         text: "Powered by https://some-random-api.ml",
                         iconURL: "https://i.some-random-api.ml/logo.png",
@@ -194,7 +190,7 @@ module.exports = {
                     .setTitle("Random koala fact")
                     .setImage(response.data.image)
                     .setDescription(response.data.fact)
-                    .setColor(Math.floor(Math.random() * 16777215).toString(16))
+                    .setColor(Math.floor(Math.random() * 0xFFFFFF))
                     .setFooter({
                         text: "Powered by https://some-random-api.ml",
                         iconURL: "https://i.some-random-api.ml/logo.png",
@@ -208,7 +204,7 @@ module.exports = {
                     .setTitle("Random raccoon fact")
                     .setImage(response.data.image)
                     .setDescription(response.data.fact)
-                    .setColor(Math.floor(Math.random() * 16777215).toString(16))
+                    .setColor(Math.floor(Math.random() * 0xFFFFFF))
                     .setFooter({
                         text: "Powered by https://some-random-api.ml",
                         iconURL: "https://i.some-random-api.ml/logo.png",
@@ -222,7 +218,7 @@ module.exports = {
                     .setTitle("Random kangaroo fact")
                     .setImage(response.data.image)
                     .setDescription(response.data.fact)
-                    .setColor(Math.floor(Math.random() * 16777215).toString(16))
+                    .setColor(Math.floor(Math.random() * 0xFFFFFF))
                     .setFooter({
                         text: "Powered by https://some-random-api.ml",
                         iconURL: "https://i.some-random-api.ml/logo.png",
@@ -233,10 +229,6 @@ module.exports = {
 
         if (subcommand === "horizon") {
             const type = interaction.options.getString("type");
-            if (!type) {
-                await interaction.reply({ content: "Please specify a choice.", ephemeral: true });
-                return;
-            }
             
             const horizon_response = await axios.get("https://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?", {
                 params: {
