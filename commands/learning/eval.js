@@ -12,7 +12,7 @@ module.exports = {
 	async execute(interaction) {
 		const expression = interaction.options.getString("expression");
 
-		// Calculate and round to 2 decimal places
+		// Calculate and round the result
 		const result = Math.round(mathjs.evaluate(expression) * 100) / 100;
 
 		const embed = new MessageEmbed()
