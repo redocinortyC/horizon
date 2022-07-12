@@ -1,22 +1,27 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const { MessageEmbed } = require("discord.js");
-const axios = require("axios");
+const mathjs = require('mathjs');
 
 // Random fact command 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName("calc")
-        .setDescription("Calculate a math expression.")
+		.setName("eval")
+        .setDescription("Evaluates using Math.js.")
 		.addStringOption(option => option.setName("expression").setRequired(true).setDescription("The expression to calculate.")),
 		
 	async execute(interaction) {
 		const expression = interaction.options.getString("expression");
-		const result = eval(expression.replace(/[^0-9+\-*/()]/g, "").replace(/\^/g, "**"));
+
+		// Calculate and round to 2 decimal places
+		const result = Math.round(mathjs.evaluate(expression) * 100) / 100;
 
 		const embed = new MessageEmbed()
-			.setTitle("Calculation")
+			.setTitle(`What is ${expression}?`)
 			.setDescription(`${expression} = ${result}`)
-			.setColor(Math.floor(Math.random() * 16777215).toString(16));
+			.setColor(Math.floor(Math.random() * 0xFFFFFF))
+			.setFooter({
+				text: "Powered by Math.js"
+			});
 
 		await interaction.reply({ embeds: [embed] });
 	}

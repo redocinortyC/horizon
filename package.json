@@ -11,7 +11,8 @@
     "@discordjs/rest": "^0.5.0",
     "axios": "^0.27.2",
     "discord-api-types": "^0.36.1",
-    "discord.js": "^13.8.1"
+    "discord.js": "^13.8.1",
+    "mathjs": "^10.6.4"
   },
   "devDependencies": {
     "chalk": "^4.1.2",
