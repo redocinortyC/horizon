@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, bold } = require("@discordjs/builders");
 const { PermissionFlagsBits } = require('discord-api-types/v10');
+const wait = require('node:timers/promises').setTimeout;
 
 // Moderation commands
 module.exports = {
@@ -25,6 +26,11 @@ module.exports = {
                 .addUserOption(option => option.setName("target").setDescription("The user to be muted"))
                 .addIntegerOption(option => option.setName("duration").setDescription("The duration of the mute in minutes"))
                 .addStringOption(option => option.setName("reason").setDescription("The reason for the mute")))
+        .addSubcommand(subcommand =>
+            subcommand
+            .setName("clear")
+            .setDescription("Clears a number of messages from the current channel.")
+            .addIntegerOption(option => option.setName("count").setDescription("The number of messages to clear")))
         .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers),
                 
 	async execute(interaction) {
@@ -85,6 +91,11 @@ module.exports = {
                 return;
             }
 
+            if (!muteRole) {
+                await interaction.reply({ content: "Please create a role called \"Muted\".", ephemeral: true });
+                return;
+            }
+
             const roles = target.roles.cache;
             target.roles.remove(roles);
 
@@ -97,12 +108,27 @@ module.exports = {
             } else {
                 await interaction.reply({ content: `${bold(target.user.tag)} has been muted for ${duration} minutes.\nReason: ${reason}` });
             }
-
+            
             setTimeout(() => {
                 target.roles.remove(muteRole);
                 target.roles.add(roles);
                 interaction.editReply({ content: `${bold(target.user.tag)} has been unmuted.` });
             }, muteTime);
+        }
+
+        if (subcommand === "clear") {
+            const count = interaction.options.getInteger("count");
+            if (!count) {
+                await interaction.reply({ content: "Please specify a number of messages to clear.", ephemeral: true });
+                return;
+            }
+
+            const messages = await interaction.channel.messages.fetch({ limit: count });
+            await interaction.channel.bulkDelete(messages);
+
+            await interaction.reply({ content: `Cleared ${count} messages.`, ephemeral: true });
+            await wait(5000);
+            await interaction.deleteReply();
         }
 	}
 };
