@@ -1,4 +1,3 @@
-const client = require("../utils/client");
 const chalk = require("chalk");
 const axios = require("axios");
 

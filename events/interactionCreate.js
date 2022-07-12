@@ -1,10 +1,13 @@
 const { Collection } = require("discord.js");
 const client = require("../utils/client");
+const { cooldown_duration } = require("../config.json");
 const chalk = require("chalk");
 
-// Cooldown handler
 const cooldowns = new Collection();
-const duration = 10000;
+
+if (!cooldown_duration) {
+    cooldown_duration = 10000; // Default cooldown duration
+}
 
 // On interaction create event 
 module.exports = {
@@ -21,8 +24,8 @@ module.exports = {
             }
 
             if (cooldowns.has(cooldown.user + cooldown.command)) {
-                console.log(chalk.yellow("[INTERACTION] %s is on cooldown for %s."), interaction.user.tag, interaction.commandName);
-                interaction.reply(`You can only use this command once every ${duration / 1000} seconds.`);
+                console.log(chalk.yellow("[COOLDOWN] %s is on cooldown for %s."), interaction.user.tag, interaction.commandName);
+                interaction.reply(`You can only use this command once every ${cooldown_duration / 1000} seconds.`);
                 return;
             } else {
                 console.log(chalk.magenta("[INTERACTION] %s executed the %s command in #%s."), interaction.user.tag, interaction.commandName, interaction.channel.name);
@@ -30,7 +33,7 @@ module.exports = {
                 cooldowns.set(cooldown.user + cooldown.command);
                 setTimeout(() => {
                     cooldowns.delete(cooldown.user + cooldown.command);
-                }, duration);
+                }, cooldown_duration);
             }
         } catch (error) {
             console.error(error);
