@@ -22,7 +22,7 @@ module.exports = {
                     .addChoices(
                         { name: "cat", value: "cat" },
                         { name: "dog", value: "dog" },
-                        { name: "birb", value: "birb" },
+                        { name: "bird", value: "bird" },
                         { name: "panda", value: "panda" },
                         { name: "red panda", value: "redpanda" },
                         { name: "fox", value: "fox" },
@@ -128,7 +128,7 @@ module.exports = {
                 await interaction.reply({ content: "🐶 I found a dog!", embeds: [embed] });
             }
 
-            if (type === "birb") {
+            if (type === "bird") {
                 const response = await axios.get("https://some-random-api.ml/animal/bird");
                 const embed = new MessageEmbed()
                     .setTitle("Random bird fact")
