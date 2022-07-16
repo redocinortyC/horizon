@@ -4,7 +4,7 @@ const path = require("path");
 const { REST } = require("@discordjs/rest");
 const chalk = require("chalk");
 const { Routes } = require("discord-api-types/v9");
-const { token, clientId, guildId } = require("./utils/env");
+const { token, clientId } = require("./utils/env");
 
 const rest = new REST({ version: "9" }).setToken(token);
 
@@ -30,7 +30,7 @@ for (const folder of commandFolders) {
 	try {
 		console.log(chalk.yellow("[DEPLOY] Started refreshing application (/) commands..."));
 		await rest.put(
-			Routes.applicationGuildCommands(clientId, guildId),
+			Routes.applicationCommands(clientId),
 			{ body: commands },
 		);
 		console.log(chalk.green("[DEPLOY] Successfully refreshed application (/) commands!"));
