@@ -7,19 +7,11 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("fun")
 		.setDescription("Some entertainment for the bored.")
-        .addSubcommand(subcommand =>
-            subcommand
-                .setName("8ball")
-                .setDescription("Ask the magic 8ball a question.")
-                .addStringOption(option => option.setName("question").setDescription("The question to ask the magic 8ball")))
-        .addSubcommand((subcommand) =>
-            subcommand
-                .setName("joke")
-                .setDescription("Get a random joke."))
-        .addSubcommand((subcommand) =>
-            subcommand
-                .setName("quote")
-                .setDescription("Get a random quote."))
+        // .addSubcommand(subcommand =>
+        //     subcommand
+        //         .setName("8ball")
+        //         .setDescription("Ask the magic 8ball a question.")
+        //         .addStringOption(option => option.setName("question").setRequired(true).setDescription("The question to ask the magic 8ball")))
         .addSubcommand((subcommand) =>
             subcommand
                 .setName("animal")
@@ -30,7 +22,7 @@ module.exports = {
                     .addChoices(
                         { name: "cat", value: "cat" },
                         { name: "dog", value: "dog" },
-                        { name: "birb", value: "birb" },
+                        { name: "bird", value: "bird" },
                         { name: "panda", value: "panda" },
                         { name: "red panda", value: "redpanda" },
                         { name: "fox", value: "fox" },
@@ -38,6 +30,10 @@ module.exports = {
                         { name: "raccoon", value: "raccoon" },
                         { name: "kangaroo", value: "kangaroo" },
                     )))
+        .addSubcommand((subcommand) =>
+            subcommand
+                .setName("fact")
+                .setDescription("Get a random fact."))
         .addSubcommand(subcommand =>
             subcommand
                 .setName("horizon")
@@ -49,60 +45,60 @@ module.exports = {
                         .addChoices(
                             { name: "sunrise", value: "sunrise" },
                             { name: "sunset", value: "sunset" }
-                        ))),
+                        )))
+        .addSubcommand((subcommand) =>
+            subcommand
+                .setName("joke")
+                .setDescription("Get a random joke."))
+        .addSubcommand((subcommand) =>
+            subcommand
+                .setName("meme")
+                .setDescription("Get a random meme."))
+        .addSubcommand((subcommand) =>
+            subcommand
+                .setName("quote")
+                .setDescription("Get a random quote.")),
 
 	async execute(interaction) {
         const subcommand = interaction.options.getSubcommand();
 
-        if (subcommand === "joke") {
-            let response = await axios.get("https://v2.jokeapi.dev/joke/Any?safe-mode");
-            let joke;
+        // if (subcommand === "8ball") {
+        //     const question = interaction.options.getString("question");
 
-            if (response.data.type === "twopart") {
-                joke = response.data.setup + " " + `${bold(response.data.delivery)}`;
-            } else if (response.data.type === "single") {
-                joke = response.data.joke;
-            }
-            
-            const embed = new MessageEmbed()
-                .setTitle(response.data.category)
-                .setDescription(joke)
-                .setColor(Math.floor(Math.random() * 16777215).toString(16))
-                .setFooter({
-                    text: "Powered by https://v2.jokeapi.dev",
-                    iconURL: "https://sv443.net/resources/images/jokeapi.png"
-                });
-            
-            await interaction.reply({ content: "✨ I found a joke!", embeds: [embed] });
-        }
+        //     if (!question.endsWith("?")) {
+        //         await interaction.reply({ content: "Questions end with a question mark.", ephemeral: true });
+        //         return;
+        //     }
 
-        if (subcommand === "quote"){
-            const quote_response = await axios.get("https://api.quotable.io/random").catch(err => {
-                interaction.editReply({ content: "Error getting a quote.", ephemeral: true });
-                console.error(err);
-            });
+        //     const responses = [
+        //         "As I see it, yes.",
+        //         "It is certain.",
+        //         "It is decidedly so.",
+        //         "Most likely.",
+        //         "Outlook good.",
+        //         "Signs point to yes.",
+        //         "Without a doubt.",
+        //         "Yes.",
+        //         "Yes - definitely.",
+        //         "You may rely on it.",
+        //         "Reply hazy, try again.",
+        //         "Ask again later.",
+        //         "Better not tell you now.",
+        //         "Cannot predict now.",
+        //         "Concentrate and ask again.",
+        //         "Don't count on it.",
+        //         "My reply is no.",
+        //         "My sources say no.",
+        //         "Outlook not so good.",
+        //         "Very doubtful.",
+        //     ]
 
-            const data = quote_response.data;
-            const quote = data.content;
-            const author = data.author;
-
-            const quote_embed = new MessageEmbed()
-                .setTitle(`${author}`)
-                .setDescription(`${quote}`)
-                .setColor(Math.floor(Math.random() * 16777215).toString(16))
-                .setFooter({
-                    text: "Powered by https://quotable.io",
-                });
-
-            await interaction.reply({ content: "💬 I found a quote!", embeds: [quote_embed] });
-        }
+        //     const response = responses[Math.floor(Math.random() * responses.length)];
+        //     await interaction.reply(`> ${interaction.user.toString()} asked: ${question}\n${bold(response)}`);
+        // }
 
         if (subcommand === "animal") {
             const type = interaction.options.getString("type");
-            if (!type) {
-                await interaction.reply({ content: "Please specify a type.", ephemeral: true });
-                return;
-            }
 
             if (type === "cat") {
                 const response = await axios.get("https://some-random-api.ml/animal/cat");
@@ -110,7 +106,7 @@ module.exports = {
                     .setTitle("Random cat fact")
                     .setImage(response.data.image)
                     .setDescription(response.data.fact)
-                    .setColor(Math.floor(Math.random() * 16777215).toString(16))
+                    .setColor(Math.floor(Math.random() * 0xFFFFFF))
                     .setFooter({
                         text: "Powered by https://some-random-api.ml",
                         iconURL: "https://i.some-random-api.ml/logo.png",
@@ -124,7 +120,7 @@ module.exports = {
                     .setTitle("Random dog fact")
                     .setImage(response.data.image)
                     .setDescription(response.data.fact)
-                    .setColor(Math.floor(Math.random() * 16777215).toString(16))
+                    .setColor(Math.floor(Math.random() * 0xFFFFFF))
                     .setFooter({
                         text: "Powered by https://some-random-api.ml",
                         iconURL: "https://i.some-random-api.ml/logo.png",
@@ -132,13 +128,13 @@ module.exports = {
                 await interaction.reply({ content: "🐶 I found a dog!", embeds: [embed] });
             }
 
-            if (type === "birb") {
+            if (type === "bird") {
                 const response = await axios.get("https://some-random-api.ml/animal/bird");
                 const embed = new MessageEmbed()
                     .setTitle("Random bird fact")
                     .setImage(response.data.image)
                     .setDescription(response.data.fact)
-                    .setColor(Math.floor(Math.random() * 16777215).toString(16))
+                    .setColor(Math.floor(Math.random() * 0xFFFFFF))
                     .setFooter({
                         text: "Powered by https://some-random-api.ml",
                         iconURL: "https://i.some-random-api.ml/logo.png",
@@ -152,7 +148,7 @@ module.exports = {
                     .setTitle("Random panda fact")
                     .setImage(response.data.image)
                     .setDescription(response.data.fact)
-                    .setColor(Math.floor(Math.random() * 16777215).toString(16))
+                    .setColor(Math.floor(Math.random() * 0xFFFFFF))
                     .setFooter({
                         text: "Powered by https://some-random-api.ml",
                         iconURL: "https://i.some-random-api.ml/logo.png",
@@ -161,12 +157,12 @@ module.exports = {
             }
 
             if (type === "redpanda") {
-                const response = await axios.get("https://some-random-api.ml/animal/redpanda");
+                const response = await axios.get("https://some-random-api.ml/animal/red_panda");
                 const embed = new MessageEmbed()
                     .setTitle("Random red panda fact")
                     .setImage(response.data.image)
                     .setDescription(response.data.fact)
-                    .setColor(Math.floor(Math.random() * 16777215).toString(16))
+                    .setColor(Math.floor(Math.random() * 0xFFFFFF))
                     .setFooter({
                         text: "Powered by https://some-random-api.ml",
                         iconURL: "https://i.some-random-api.ml/logo.png",
@@ -180,7 +176,7 @@ module.exports = {
                     .setTitle("Random fox fact")
                     .setImage(response.data.image)
                     .setDescription(response.data.fact)
-                    .setColor(Math.floor(Math.random() * 16777215).toString(16))
+                    .setColor(Math.floor(Math.random() * 0xFFFFFF))
                     .setFooter({
                         text: "Powered by https://some-random-api.ml",
                         iconURL: "https://i.some-random-api.ml/logo.png",
@@ -194,7 +190,7 @@ module.exports = {
                     .setTitle("Random koala fact")
                     .setImage(response.data.image)
                     .setDescription(response.data.fact)
-                    .setColor(Math.floor(Math.random() * 16777215).toString(16))
+                    .setColor(Math.floor(Math.random() * 0xFFFFFF))
                     .setFooter({
                         text: "Powered by https://some-random-api.ml",
                         iconURL: "https://i.some-random-api.ml/logo.png",
@@ -208,7 +204,7 @@ module.exports = {
                     .setTitle("Random raccoon fact")
                     .setImage(response.data.image)
                     .setDescription(response.data.fact)
-                    .setColor(Math.floor(Math.random() * 16777215).toString(16))
+                    .setColor(Math.floor(Math.random() * 0xFFFFFF))
                     .setFooter({
                         text: "Powered by https://some-random-api.ml",
                         iconURL: "https://i.some-random-api.ml/logo.png",
@@ -222,7 +218,7 @@ module.exports = {
                     .setTitle("Random kangaroo fact")
                     .setImage(response.data.image)
                     .setDescription(response.data.fact)
-                    .setColor(Math.floor(Math.random() * 16777215).toString(16))
+                    .setColor(Math.floor(Math.random() * 0xFFFFFF))
                     .setFooter({
                         text: "Powered by https://some-random-api.ml",
                         iconURL: "https://i.some-random-api.ml/logo.png",
@@ -231,12 +227,23 @@ module.exports = {
             }
         }
 
+        if (subcommand === "fact") {
+            const response = await axios.get("https://uselessfacts.jsph.pl/random.json?language=en");
+            const fact = response.data.text;
+
+            const embed = new MessageEmbed()
+                .setTitle("Random fact")
+                .setDescription(fact)
+                .setColor(Math.floor(Math.random() * 0xFFFFFF))
+                .setFooter({
+                    text: "Powered by https://uselessfacts.jsph.pl"
+                });
+
+            await interaction.reply({ embeds: [embed] });
+        }
+
         if (subcommand === "horizon") {
             const type = interaction.options.getString("type");
-            if (!type) {
-                await interaction.reply({ content: "Please specify a choice.", ephemeral: true });
-                return;
-            }
             
             const horizon_response = await axios.get("https://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?", {
                 params: {
@@ -264,6 +271,69 @@ module.exports = {
                 });
 
             await interaction.reply({ content: `🌄 I found a ${type}!`, embeds: [horizon_embed] });
+        }
+
+        if (subcommand === "joke") {
+            let response = await axios.get("https://v2.jokeapi.dev/joke/Any?safe-mode");
+            let joke;
+
+            if (response.data.type === "twopart") {
+                joke = response.data.setup + " " + `${bold(response.data.delivery)}`;
+            } else if (response.data.type === "single") {
+                joke = response.data.joke;
+            }
+            
+            const embed = new MessageEmbed()
+                .setTitle(response.data.category)
+                .setDescription(joke)
+                .setColor(Math.floor(Math.random() * 0xFFFFFF))
+                .setFooter({
+                    text: "Powered by https://v2.jokeapi.dev",
+                    iconURL: "https://sv443.net/resources/images/jokeapi.png"
+                });
+            
+            await interaction.reply({ content: "✨ I found a joke!", embeds: [embed] });
+        }
+
+        if (subcommand === "meme") {
+            const response = await axios.get("https://meme-api.herokuapp.com/gimme");
+            const meme = response.data;
+
+            if (meme.nsfw) {
+                return this.run(interaction, "meme");
+            }
+
+            const embed = new MessageEmbed()
+                .setTitle(meme.title)
+                .setDescription(`By ${meme.author} from r/${meme.subreddit}`)
+                .setImage(meme.url)
+                .setColor(Math.floor(Math.random() * 0xFFFFFF))
+                .setFooter({
+                    text: `Powered by https://meme-api.herokuapp.com`
+                });
+
+            await interaction.reply({ content: "🤣 I found a meme!", embeds: [embed] });
+        }
+
+        if (subcommand === "quote"){
+            const quote_response = await axios.get("https://api.quotable.io/random").catch(err => {
+                interaction.editReply({ content: "Error getting a quote.", ephemeral: true });
+                console.error(err);
+            });
+
+            const data = quote_response.data;
+            const quote = data.content;
+            const author = data.author;
+
+            const quote_embed = new MessageEmbed()
+                .setTitle(`${author}`)
+                .setDescription(`${quote}`)
+                .setColor(Math.floor(Math.random() * 0xFFFFFF))
+                .setFooter({
+                    text: "Powered by https://quotable.io",
+                });
+
+            await interaction.reply({ content: "💬 I found a quote!", embeds: [quote_embed] });
         }
 	}
 };

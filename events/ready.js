@@ -1,4 +1,3 @@
-const client = require("../utils/client");
 const chalk = require("chalk");
 const axios = require("axios");
 
@@ -17,14 +16,10 @@ module.exports = {
 
 			client.user.setStatus((now > sunrise && now < sunset) ? "online" : "idle");
 
-			if (now.getTime() > sunrise.getTime() - 3600000 && now.getTime() < sunrise.getTime() + 3600000) {
-				status = "the sunrise";
-			} else if (now.getTime() > sunset.getTime() - 3600000 && now.getTime() < sunset.getTime() + 3600000) {
-				status = "the sunset";
-			} else if (now.getTime() > sunset.getTime() + 3600000 && now.getTime() < sunrise.getTime() - 3600000) {
-				status = "the night";
+			if (now > sunrise && now < sunset) {
+				status = "the day goes by";
 			} else {
-				status = "the horizon";
+				status = "the night falls";
 			}
 
 			client.user.setActivity(status, { type: "WATCHING" });
