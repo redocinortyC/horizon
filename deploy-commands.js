@@ -30,7 +30,7 @@ for (const folder of commandFolders) {
 	try {
 		console.log(chalk.yellow("[DEPLOY] Started refreshing application (/) commands..."));
 		await rest.put(
-			Routes.applicationGuildCommands(clientId),
+			Routes.applicationCommands(clientId),
 			{ body: commands },
 		);
 		console.log(chalk.green("[DEPLOY] Successfully refreshed application (/) commands!"));
