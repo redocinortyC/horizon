@@ -35,7 +35,6 @@ module.exports = {
                 
 	async execute(interaction) {
         const subcommand = interaction.options.getSubcommand();
-        const muteRole = interaction.guild.roles.cache.find(role => role.name === "Muted");
 
         if (subcommand === "ban") {
             const target = interaction.options.getUser("target");
@@ -57,6 +56,8 @@ module.exports = {
             const target = interaction.options.getMember("target");
             const duration = interaction.options.getInteger("duration");
             const reason = interaction.options.getString("reason");
+
+            const muteRole = interaction.guild.roles.cache.find(role => role.name === "Muted");
 
             if (!muteRole) {
                 await interaction.reply({ content: "Please create a role called \"Muted\".", ephemeral: true });
