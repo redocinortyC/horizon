@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, inlineCode } = require("@discordjs/builders");
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const client = require("../../utils/client");
 
 // Help command 
@@ -16,7 +16,7 @@ module.exports = {
             }
         }).sort((a, b) => a.name.localeCompare(b.name));
 
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setColor("#ffd700")
             .setTitle("Commands")
             .addFields(commands.map(command => {
