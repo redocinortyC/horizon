@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const mathjs = require('mathjs');
 
 // Random fact command 
@@ -21,7 +21,7 @@ module.exports = {
 			return;
 		}
 
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setTitle(`What is ${expression}?`)
 			.setDescription(`${expression} = ${result}`)
 			.setColor(Math.floor(Math.random() * 0xFFFFFF))
