@@ -39,9 +39,14 @@ module.exports = {
         if (subcommand === "ban") {
             const target = interaction.options.getUser("target");
             const reason = interaction.options.getString("reason");
-
-            interaction.guild.members.ban(target, { reason: reason });
-            await interaction.reply({ content: `${bold(target.tag)} has been banned.\nReason: ${reason}` });
+            // Compare if role is higher than target
+            if (interaction.member.roles.highest.comparePositionTo(target.roles.highest) > 0) {
+                interaction.guild.members.ban(target, { reason: reason });
+                await interaction.reply({ content: `${bold(target.tag)} has been banned.\nReason: ${reason}` });
+            }
+            else {
+                await interaction.reply({ content: `You cannot ban ${bold(target.tag)} because you are not higher than them.` });
+            }
         }
 
         if (subcommand === "kick") {
@@ -49,7 +54,13 @@ module.exports = {
             const reason = interaction.options.getString("reason");
 
             target.kick(reason);
-            await interaction.reply({ content: `${bold(target.user.tag)} has been kicked.\nReason: ${reason}` });
+            if (interaction.member.roles.highest.comparePositionTo(target.roles.highest) > 0) {
+                interaction.guild.members.kick(target, { reason: reason });
+                await interaction.reply({ content: `${bold(target.tag)} has been kicked.\nReason: ${reason}` });
+            }
+            else {
+                await interaction.reply({ content: `You cannot kick ${bold(target.tag)} because you are not higher than them.` });
+            }
         }
 
         if (subcommand === "mute") {
@@ -71,11 +82,10 @@ module.exports = {
 
             target.roles.add(muteRole);
 
-            if (duration == 1) {
-                await interaction.reply({ content: `${bold(target.user.tag)} has been muted for 1 minute.\nReason: ${reason}` });
-            } else {
+            if (interaction.member.roles.highest.comparePositionTo(target.roles.highest) > 0) {
                 await interaction.reply({ content: `${bold(target.user.tag)} has been muted for ${duration} minutes.\nReason: ${reason}` });
             }
+            
             
             setTimeout(() => {
                 target.roles.remove(muteRole);
