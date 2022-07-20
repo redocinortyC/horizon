@@ -1,5 +1,5 @@
-# Horizon Nightly
-🎑 Horizon Nightly is the dev branch of Horizon, the official Discord bot for the International Junior Honour Society community server. It is a work in progress, and is often updated with new features and bug fixes.
+# Horizon
+🌅 The official Discord bot for the International Junior Honour Society community server. It is a work in progress, and is often updated with new features and bug fixes.
 
 ## Getting started with local development
 To get started with developing the bot locally, you need to clone this repository via
@@ -7,7 +7,7 @@ To get started with developing the bot locally, you need to clone this repositor
 ```bash
 git clone https://github.com/cytronicoder/horizon.git
 ```
-Then, you need to switch to the `dev` branch:
+Then, you need to switch to the `dev` branch - **you should not commit any changes to the `main` branch**.
 
 ```bash
 cd horizon
@@ -48,3 +48,5 @@ Finally, you can start the bot by running
 ```bash
 node deploy-commands.js && node .
 ```
+
+If you want to contribute to the `main` branch, you can do so by submitting a pull request.
