@@ -28,24 +28,12 @@ for (const folder of commandFolders) {
 // Register all commands
 (async () => {
 	try {
-		if (status === "PRODUCTION") {
-			console.log(chalk.yellow("[DEPLOY] Started refreshing application (/) commands for production..."));
-			await rest.put(
-				Routes.applicationCommands(clientId),
-				{ body: commands },
-			);
-			console.log(chalk.green("[DEPLOY] Successfully refreshed application (/) commands!"));
-		} else if (status === "STAGING") {
-			console.log(chalk.yellow("[DEPLOY] Started refreshing application (/) commands for staging..."));
-			await rest.put(
-				Routes.applicationCommands(clientId, guildId),
-				{ body: commands },
-			);
-			console.log(chalk.green("[DEPLOY] Successfully refreshed application (/) commands!"));
-		} else {
-			console.log(chalk.red("[DEPLOY] Could not refresh application (/) commands because of invalid status!"));
-			return;
-		}
+		console.log(chalk.yellow("[DEPLOY] Started refreshing application (/) commands..."));
+		await rest.put(
+			Routes.applicationCommands(clientId, guildId),
+			{ body: commands },
+		);
+		console.log(chalk.green("[DEPLOY] Successfully refreshed application (/) commands!"));
 		
 		// print out all commands
 		console.log(chalk.underline("\n[DEPLOY] Registered commands:"));
