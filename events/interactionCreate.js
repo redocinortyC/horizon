@@ -1,4 +1,4 @@
-const { Collection } = require("discord.js");
+const { Collection, InteractionType } = require("discord.js");
 const client = require("../utils/client");
 const { cooldown_duration } = require("../config.json");
 const chalk = require("chalk");
@@ -13,7 +13,7 @@ if (!cooldown_duration) {
 module.exports = {
 	name: "interactionCreate",
 	async execute(interaction) {
-        if (!interaction.isCommand()) return;
+        if (!interaction.type === InteractionType.ApplicationCommand) return;
         const command = client.commands.get(interaction.commandName);
         if (!command) return;
 

@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, bold } = require("@discordjs/builders");
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const axios = require("axios");
 
 // Moderation commands
@@ -102,7 +102,7 @@ module.exports = {
 
             if (type === "cat") {
                 const response = await axios.get("https://some-random-api.ml/animal/cat");
-                const embed = new MessageEmbed()
+                const embed = new EmbedBuilder()
                     .setTitle("Random cat fact")
                     .setImage(response.data.image)
                     .setDescription(response.data.fact)
@@ -116,7 +116,7 @@ module.exports = {
 
             if (type === "dog") {
                 const response = await axios.get("https://some-random-api.ml/animal/dog");
-                const embed = new MessageEmbed()
+                const embed = new EmbedBuilder()
                     .setTitle("Random dog fact")
                     .setImage(response.data.image)
                     .setDescription(response.data.fact)
@@ -130,7 +130,7 @@ module.exports = {
 
             if (type === "bird") {
                 const response = await axios.get("https://some-random-api.ml/animal/bird");
-                const embed = new MessageEmbed()
+                const embed = new EmbedBuilder()
                     .setTitle("Random bird fact")
                     .setImage(response.data.image)
                     .setDescription(response.data.fact)
@@ -144,7 +144,7 @@ module.exports = {
 
             if (type === "panda") {
                 const response = await axios.get("https://some-random-api.ml/animal/panda");
-                const embed = new MessageEmbed()
+                const embed = new EmbedBuilder()
                     .setTitle("Random panda fact")
                     .setImage(response.data.image)
                     .setDescription(response.data.fact)
@@ -158,7 +158,7 @@ module.exports = {
 
             if (type === "redpanda") {
                 const response = await axios.get("https://some-random-api.ml/animal/red_panda");
-                const embed = new MessageEmbed()
+                const embed = new EmbedBuilder()
                     .setTitle("Random red panda fact")
                     .setImage(response.data.image)
                     .setDescription(response.data.fact)
@@ -172,7 +172,7 @@ module.exports = {
 
             if (type === "fox") {
                 const response = await axios.get("https://some-random-api.ml/animal/fox");
-                const embed = new MessageEmbed()
+                const embed = new EmbedBuilder()
                     .setTitle("Random fox fact")
                     .setImage(response.data.image)
                     .setDescription(response.data.fact)
@@ -186,7 +186,7 @@ module.exports = {
 
             if (type === "koala") {
                 const response = await axios.get("https://some-random-api.ml/animal/koala");
-                const embed = new MessageEmbed()
+                const embed = new EmbedBuilder()
                     .setTitle("Random koala fact")
                     .setImage(response.data.image)
                     .setDescription(response.data.fact)
@@ -200,7 +200,7 @@ module.exports = {
 
             if (type === "raccoon") {
                 const response = await axios.get("https://some-random-api.ml/animal/raccoon");
-                const embed = new MessageEmbed()
+                const embed = new EmbedBuilder()
                     .setTitle("Random raccoon fact")
                     .setImage(response.data.image)
                     .setDescription(response.data.fact)
@@ -214,7 +214,7 @@ module.exports = {
 
             if (type === "kangaroo") {
                 const response = await axios.get("https://some-random-api.ml/animal/kangaroo");
-                const embed = new MessageEmbed()
+                const embed = new EmbedBuilder()
                     .setTitle("Random kangaroo fact")
                     .setImage(response.data.image)
                     .setDescription(response.data.fact)
@@ -231,7 +231,7 @@ module.exports = {
             const response = await axios.get("https://uselessfacts.jsph.pl/random.json?language=en");
             const fact = response.data.text;
 
-            const embed = new MessageEmbed()
+            const embed = new EmbedBuilder()
                 .setTitle("Random fact")
                 .setDescription(fact)
                 .setColor(Math.floor(Math.random() * 0xFFFFFF))
@@ -259,7 +259,7 @@ module.exports = {
             const data = JSON.parse(horizon_response.data.replace(/^\(|\)$/g, ""));
             const photo = data.items[Math.floor(Math.random() * data.items.length)];
 
-            const horizon_embed = new MessageEmbed()
+            const horizon_embed = new EmbedBuilder()
                 .setColor(type === "sunrise" ? 0xFFFF00 : 0xFFA500)
                 .setTitle(`${photo.title}`)
                 .setURL(`${photo.link}`)
@@ -283,7 +283,7 @@ module.exports = {
                 joke = response.data.joke;
             }
             
-            const embed = new MessageEmbed()
+            const embed = new EmbedBuilder()
                 .setTitle(response.data.category)
                 .setDescription(joke)
                 .setColor(Math.floor(Math.random() * 0xFFFFFF))
@@ -303,7 +303,7 @@ module.exports = {
                 return this.run(interaction, "meme");
             }
 
-            const embed = new MessageEmbed()
+            const embed = new EmbedBuilder()
                 .setTitle(meme.title)
                 .setDescription(`By ${meme.author} from r/${meme.subreddit}`)
                 .setImage(meme.url)
@@ -325,7 +325,7 @@ module.exports = {
             const quote = data.content;
             const author = data.author;
 
-            const quote_embed = new MessageEmbed()
+            const quote_embed = new EmbedBuilder()
                 .setTitle(`${author}`)
                 .setDescription(`${quote}`)
                 .setColor(Math.floor(Math.random() * 0xFFFFFF))
