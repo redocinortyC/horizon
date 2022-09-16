@@ -1,5 +1,5 @@
 # Horizon
-🌅 The official Discord bot for the International Junior Honour Society community server. It is a work in progress, and is often updated with new features and bug fixes.
+🌅 The official Discord bot for the International Junior Honour Society community server. It is archived for now, with no future plans of updating.
 
 ## Getting started with local development
 To get started with developing the bot locally, you need to clone this repository via
